@@ -1,0 +1,42 @@
+---
+#- name: Install mysql server
+#  yum: name={{ item }} state=present
+#  with_items:
+#    - mysql-devel
+#    - mysql-server
+
+#- name: Install mysql-python
+#  pip: name=mysql-python state=present
+
+#- name: Create mysql configuration file
+#  template: src=my.cnf.j2 dest=/etc/my.cnf
+#  notify: restart mysql
+
+#- name: Start mysql service
+#  service: name=mysqld state=started enabled=true
+
+- name: Install MariaDB
+  yum:
+    name:
+      - mariadb-server
+      - mariadb
+    state: present
+
+- name: Install PyMySQL for python 3
+  pip:
+    name: PyMySQL
+    state: present
+    executable: pip3
+  become: true
+
+- name: Create MariaDB configuration file
+  template:
+    src: my.cnf.j2
+    dest: /etc/my.cnf
+  notify: restart mariadb
+
+- name: Start MariaDb
+  service:
+    name: mariadb
+    state: started
+    enabled: true

@@ -1,0 +1,26 @@
+---
+- name: Install apache, php, and php-mysql
+  yum: 
+    name: "{{ item }}"
+    state: present
+  loop:
+    - httpd
+    - php
+    - php-mysql
+    - mariadb-server
+  register: install_result
+  retries: 5
+  delay: 10
+  until: install_result is succeeded
+
+- name: Start and enable MariaDB
+  service:
+    name: mariadb
+    state: started
+    enabled: yes
+
+- name: start and enable httpd
+  service: 
+    name: httpd 
+    state: started 
+    enabled: yes
